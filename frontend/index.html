@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>3D Model Annotation Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+
+</head>
+<body>
+    <style>
+        body{
+            font-family: 'Rubik';
+            margin:0;
+            padding:0;
+            height: 100vh;
+            background-color: #c1cadb;
+        }
+        .divLoader {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+
+        .loader {
+            width: 30vw;
+        }
+
+        #root {
+            height: 100%;
+        }
+        ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #8dd5df;
+  border: 0px none #ffffff;
+  border-radius: 84px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6cd4d8;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #118e92;
+}
+::-webkit-scrollbar-track {
+  background: #666666;
+  border: 0px none #ffffff;
+  border-radius: 84px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #666666;
+}
+::-webkit-scrollbar-track:active {
+  background: #333333;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+        
+    </style>
+    <div id="root">
+        <div class="divLoader">
+            <img class='loader' src="./resources/splash.svg" alt="loading">
+        </div>
+    </div>
+    <script type="module" src="./index.js"></script>
+</body>
+</html>
