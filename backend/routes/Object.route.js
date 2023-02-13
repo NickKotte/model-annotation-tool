@@ -15,9 +15,8 @@ router.get('/', async (req, res, next) => {
 		let query = {}
 		if (classLabel) query.classLabel = classLabel
 		if (filename) query.objectFilename = { $regex: filename, $options: 'i' }
-		if (page) query.page = page
-
-		const models = await Object.find(query).skip(skip).limit(itemsPerPage);
+		
+		const models = await Object.find(query).skip(skip).limit(itemsPerPage)
 		res.status(200).json(models);
 	} catch (err) {
 		next(err)

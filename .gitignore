@@ -31,3 +31,5 @@ build/
 bin/
 lib/
 include/
+share/
+py_env/

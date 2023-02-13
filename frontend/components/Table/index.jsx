@@ -1,11 +1,11 @@
-import React from "react";
+import Card from "@mui/material/Card";
+import { useEffect, useContext } from "react";
 import styled from "styled-components";
-import { getModels } from "../../utilities/object.api";
+import GlobalStateContext from "../../utilities/context";
 import Row from "./Row";
 
 const TableContainer = styled.div`
   width: 100%;
-  overflow-x: auto;
 `;
 
 const Table = styled.table`
@@ -29,22 +29,24 @@ const TableHeadCell = styled.th`
   text-align: left;
 `;
 
-const TableBody = styled.tbody`
+const TableBody = styled.div`
   background-color: #fff;
+  width: 100%;
+  height: 100%;
 `;
 
 // A table for the data of 3D models
 export default _ => {
-	const [models, setModels] = React.useState([]);
-	const fetchTableData = () => {
-		getModels().then((res) => {
-			console.log(res);
-			setModels(res);
-		});
-	}
-	React.useEffect(() => {
-		fetchTableData();
+	const { globalState, API } = useContext(GlobalStateContext);
+	console.log(globalState)
+	const { models } = globalState;
+	useEffect(() => {
+		API.fetchModels();
 	}, []);
+
+	useEffect(() => {
+		console.log(models);
+	}, [models]);
 
 	return (
 		<TableContainer>
@@ -56,11 +58,11 @@ export default _ => {
 						<TableHeadCell>Column 3</TableHeadCell>
 					</TableHeadRow>
 				</TableHead>
-				<TableBody>
-					{models.map((row, index) => (
-						<Row key={index} model={row} />
-					))}
-				</TableBody>
 			</Table>
+			<TableBody>
+				{models?.map((row, index) => (
+					<Row key={index} model={row} />
+				))}
+			</TableBody>
 		</TableContainer>
 )}

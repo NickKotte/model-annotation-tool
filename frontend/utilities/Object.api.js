@@ -9,12 +9,17 @@ import { handleResponse } from "./helpers"
  * 	- classLabel: String
  * 	- filename: String
  *
- * @param {object} query - optional query options
+ * @param {object} query - (optional) query options
+ * 		- page: Number
+ * 		- itemsPerPage: Number
+ * 		- classLabel: String
+ * 		- filename: String
+ * 
  * @returns {array} - an array of objects
 */
 export const getModels = (query) => {
 	const queryString = new URLSearchParams(query).toString()
-	return fetch(`/api/models${queryString}`)
+	return fetch(`/api/models?${queryString}`)
 		.then(handleResponse)
 }
 

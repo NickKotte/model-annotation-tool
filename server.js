@@ -8,18 +8,15 @@ const mongoose = require('mongoose');
 const ObjectRouter = require('./backend/routes/Object.route')
 
 //* Database
+mongoose.set('strictQuery', false)
 var db = mongoose.connect(
     process.env.MONGO_URI,
 	() => console.log("Connected to database")
 )
 db.catch(error => {
-    console.error("Error connecting to mongoDB")
+    console.error("Error connecting to mongoDB. Make sure MONGO_URI is set in the environment variables.")
     process.exit(1)
 })
-
-//* Routes
-// Handle requests to the /api/models route
-app.use('/api/models', ObjectRouter)
 
 //* Middleware
 // Allow CORS access from any origin
@@ -39,6 +36,10 @@ app.use((err, req, res, next) => {
         }
     })
 })
+
+//* Routes
+// Handle requests to the /api/models route
+app.use('/api/models', ObjectRouter)
 
 // Serve the /dist directory as a static file
 app.use(express.static(path.join(__dirname, "/dist")))

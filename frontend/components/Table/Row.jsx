@@ -1,48 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { updateModel } from '../../utilities/object.api';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
+import { ButtonGroup } from '@mui/material';
 
-const TableBodyRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f2f2f2;
-  }
+const Wrapper = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	padding: 0.5rem;
+	transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+	${({ isModified }) => isModified && `
+		background-color: #e3fbdb;
+		box-shadow: 0 0 5px #70ff02;
+	`}
 `;
-
-const TableBodyCell = styled.td`
-  padding: 10px 15px;
-  text-align: left;
+const Column = styled.div`
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-between;
 `;
-
+const File = styled.div`
+	position: relative;
+`
 const FileInput = styled.input`
-	display: none;
-`;
+	position: absolute;
+	z-index: 1;
+	opacity: 0;
+	transition: opacity 0.2s ease-in-out;
 
-const FileInputLabel = styled.label`
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.42857143;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background-image: none;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
+	&:hover {
+		opacity: 1;
+	}
 `;
-
 /**
  * A model has the following properties:
  * 	- objectFilename: String (required) (mui textfield)
@@ -75,80 +68,80 @@ export default Row = ({model}) => {
 		});
 	}
 
+	// watch for changes in the model and mark the row as modified
+	useEffect(() => {
+		if (JSON.stringify(model) !== JSON.stringify(modifiedModel)) {
+			setIsModified(true);
+		} else {
+			setIsModified(false);
+		}
+	}, [modifiedModel]);
+
+	console.log(modifiedModel)
 	return (
-		<TableBodyRow>
-			<TableBodyCell>
-				<FileInput
-					accept=".obj"
-					id="object-file-input"
-					type="file"
-				/>
-				<FileInputLabel htmlFor="object-file-input">
-					Upload
-				</FileInputLabel>
-			</TableBodyCell>
-			<TableBodyCell>
-				<TextField
-					name="objectFilename"
-					value={modifiedModel.objectFilename}
-					onChange={handleModelChange}
-				/>
-			</TableBodyCell>
-			<TableBodyCell>
+		<Wrapper isModified={isModified}>
+			<Column>
+				<File>
+					<FileInput
+						type="file"
+						name="objectFile"
+						id="objectFile"
+						onChange={e => setModifiedModel({ ...modifiedModel, objectFilename: e.target.files[0].name })}
+					/>
+					<TextField
+						label="Object Filename"
+						name="objectFilename"
+						value={modifiedModel.objectFilename}
+						onChange={handleModelChange}
+						variant='standard'
+					/>
+				</File>
+				<br />
 				<Autocomplete
-					name="classLabel"
+					id="class-label"
+					options={['chair', 'table', 'lamp']}
+					renderInput={(params) => <TextField {...params} label="Class Label" />}
 					value={modifiedModel.classLabel}
-					onChange={handleModelChange}
-					options={['chair', 'table', 'bed', 'sofa', 'desk', 'dresser', 'nightstand', 'bookshelf', 'bathtub', 'toilet']}
+					onChange={(event, newValue) => setModifiedModel({ ...modifiedModel, classLabel: newValue })}
 				/>
-			</TableBodyCell>
-			<TableBodyCell>
-				<TextField
-					name="modelDescriptions.baseText"
-					value={modifiedModel.modelDescriptions.baseText}
-					onChange={handleModelChange}
-				/>
-			</TableBodyCell>
-			<TableBodyCell>
-				<TextField
-					name="modelDescriptions.generatedText"
-					value={modifiedModel.modelDescriptions.generatedText}
-					onChange={handleModelChange}
-					multiline
-				/>
-			</TableBodyCell>
-			<TableBodyCell>
-				<TextField
-					name="renderImageFilename"
-					value={modifiedModel.renderImageFilename}
-					onChange={handleModelChange}
-				/>
-			</TableBodyCell>
-			<TableBodyCell>
-				<TextField
-					name="textureDescriptions.baseText"
-					value={modifiedModel.textureDescriptions.baseText}
-					onChange={handleModelChange}
-				/>
-			</TableBodyCell>
-			<TableBodyCell>
-				<TextField
-					name="textureDescriptions.generatedText"
-					value={modifiedModel.textureDescriptions.generatedText}
-					onChange={handleModelChange}
-					multiline
-				/>
-			</TableBodyCell>
-			<TableBodyCell>
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={handleSave}
-					disabled={!isModified}
-				>
-					Save
-				</Button>
-			</TableBodyCell>
-		</TableBodyRow>
+			</Column>
+			<Column>
+				{!modifiedModel.modelDescriptions.generatedText ? (<>
+					<TextField
+						key='Model Base Description'
+						label="Model Base Description"
+						value={modifiedModel.modelDescriptions.baseText}
+						onChange={e => setModifiedModel({ ...modifiedModel, modelDescriptions: { baseText: e.target.value } })}
+					/>
+					<Button
+						variant="contained"
+						onClick={() => {
+							// generate model description
+							setModifiedModel({ ...modifiedModel, modelDescriptions: { ...modifiedModel.modelDescriptions, generatedText: 'generated model description' } });
+						}}
+					>Convert</Button>
+				</>) : <>
+					<TextField
+						key='Model Generated Description'
+						label="Model Generated Description"
+						name="modelDescriptions.generatedText"
+						value={modifiedModel.modelDescriptions.generatedText}
+						onChange={e => setModifiedModel({ ...modifiedModel, modelDescriptions: { generatedText: e.target.value } })}
+					/>
+					<ButtonGroup>
+						<Button variant='contained' color='error' onClick={() => {
+							setModifiedModel({ ...modifiedModel, modelDescriptions: { ...modifiedModel.modelDescriptions, generatedText: '' } });
+						}}>Clear</Button>
+						<Button variant='contained' color='success' onClick={() => {
+							// generate model description
+						}}>Regenerate</Button>
+					</ButtonGroup>
+				</>}
+			</Column>
+			<Column>
+				
+			</Column>
+				
+		</Wrapper>
 	);
 }
