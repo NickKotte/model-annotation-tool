@@ -1,11 +1,11 @@
 import Table from "../Table";
 import Row from "../Table/Row";
+import Editor from "./Editor";
 
 
 export default DataAnnotation = () => {
 	return <div>
-		hello
-		<Row></Row>
+		<Editor />
 		<Table></Table>
 	</div>;
 };

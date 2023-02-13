@@ -49,7 +49,8 @@ export const createModel = (model) => {
 	return fetch('/api/models', {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Accept: "application/json",
 		},
 		body: JSON.stringify(model)
 	})

@@ -31,6 +31,10 @@ const objectSchema = new Schema({
 			generatedText: null,
 		},
 	},
+	numTokens: {
+		type: Number,
+		default: 0,
+	}
 }, { timestamps: true });
 
 const Model = mongoose.model('Object', objectSchema);

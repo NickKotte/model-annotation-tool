@@ -8,16 +8,16 @@ const createError = require('http-errors')
 router.get('/', async (req, res, next) => {
 	try {
 		const { classLabel, filename } = req.query
+		const itemsPerPage = req.query.itemsPerPage || 10;
+		const page = req.query.page || 1;
+		const skip = (page - 1) * itemsPerPage;
+
 		let query = {}
 		if (classLabel) query.classLabel = classLabel
 		if (filename) query.objectFilename = { $regex: filename, $options: 'i' }
 		if (page) query.page = page
 
-		const itemsPerPage = res.query.itemsPerPage || 10;
-		const page = req.query.page || 1;
-		const skip = (page - 1) * itemsPerPage;
-
-		const models = await Model.find(query).skip(skip).limit(itemsPerPage);
+		const models = await Object.find(query).skip(skip).limit(itemsPerPage);
 		res.status(200).json(models);
 	} catch (err) {
 		next(err)
@@ -44,6 +44,7 @@ router.get('/:id', async (req, res, next) => {
 // @access  Public
 router.post('/', async (req, res, next) => {
 	try {
+		console.log(req.body)
 		const model = await Object.create(req.body)
 		if (!model) throw createError(400, 'Could not create model')
 		res.status(201).json(model)
