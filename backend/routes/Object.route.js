@@ -1,15 +1,6 @@
 const router = require('express').Router()
 const Object = require('../models/Object.model')
 const createError = require('http-errors')
-const imagemin = require('imagemin')
-const imageminJpegtran = require('imagemin-jpegtran')
-const imageminPngquant = require('imagemin-pngquant')
-const fs = require('fs')
-const path = require('path')
-const { v4: uuidv4 } = require('uuid')
-const multer = require('multer')
-
-const images
 
 // @route   GET api/models
 // @desc    Get all models
@@ -26,9 +17,7 @@ router.get('/', async (req, res, next) => {
 		if (filename) query.objectFilename = { $regex: filename, $options: 'i' }
 		
 		const models = await Object.find(query).skip(skip).limit(itemsPerPage)
-		// add a renderImages property to each model
-		const modelsWithRenderImages = models.map(model => ({...model._doc, renderImages: ['https://images.free3d.com/imgd/l95485-bugatti-chiron-2017-model-31847.jpg', 'https://images.free3d.com/imgd/l95485-bugatti-chiron-2017-model-31847.jpg', 'https://images.free3d.com/imgd/l95485-bugatti-chiron-2017-model-31847.jpg']}))
-		res.status(200).json(modelsWithRenderImages);
+		res.status(200).json(models);
 	} catch (err) {
 		next(err)
 	}
@@ -99,23 +88,5 @@ router.delete('/:id', async (req, res, next) => {
 		next(err)
 	}
 })
-
-// @route   GET api/models/:id/renderImages
-// @desc    Get render images for a model
-// @access  Public
-router.get('/:id/renderImages', async (req, res, next) => {
-	try {
-		const { id } = req.params
-		if (!id) throw createError(400, 'No id provided')
-		const model = await Object.findById(id)
-		if (!model) throw createError(404, 'Could not find model')
-		res.status(200).json(model.renderImages)
-	} catch (err) {
-		next(err)
-	}
-})
-
-// @route   POST api/models/:id/renderImages
-// @desc    Add render images to a model
 
 module.exports = router

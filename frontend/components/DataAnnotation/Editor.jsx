@@ -15,10 +15,10 @@ const Transition = forwardRef(function Transition(props, ref) {
 export default Editor = () => {
 	const { globalState, setGlobalState } = useContext(GlobalStateContext);
 	const [model, setModel] = useState({
-		objectFilename: '',
-		classLabel: '',
+		objectFilename: 'Test',
+		classLabel: 'chair',
 		modelDescriptions: {
-			baseText: '',
+			baseText: 'blue chair with no arms',
 			generatedText: '',
 		},
 		textureDescriptions: {
