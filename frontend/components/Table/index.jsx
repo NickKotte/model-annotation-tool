@@ -1,4 +1,3 @@
-import Card from "@mui/material/Card";
 import { useEffect, useContext } from "react";
 import styled from "styled-components";
 import GlobalStateContext from "../../utilities/context";
