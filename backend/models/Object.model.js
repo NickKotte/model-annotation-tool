@@ -6,6 +6,10 @@ const objectSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	fileSize: {
+		type: Number,
+		required: true,
+	},
 	classLabel: {
 		type: String,
 		required: true,
@@ -20,10 +24,6 @@ const objectSchema = new Schema({
 			generatedText: null,
 		},
 	},
-	renderImageFilename: {
-		type: String,
-		default: null,
-	},
 	textureDescriptions: {
 		type: Object,
 		default: {
@@ -34,7 +34,15 @@ const objectSchema = new Schema({
 	numTokens: {
 		type: Number,
 		default: 0,
-	}
+	},
+	isComplex: {
+		type: Boolean,
+		default: false,
+	},
+	renderImages: {
+		type: Array,
+		default: [],
+	},
 }, { timestamps: true });
 
 const Model = mongoose.model('Object', objectSchema);

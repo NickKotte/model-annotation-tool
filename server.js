@@ -22,11 +22,17 @@ db.catch(error => {
 // Allow CORS access from any origin
 app.use(cors({ exposedHeaders: ["Authorization"] }))
 // Parse JSON request bodies
-app.use(express.json())
+app.use(express.json( { limit: '50mb' } ));
 // Log requests and responses to the console
 app.use(morgan('dev'));
 // Serve the /public directory as a static file
 app.use('/public', express.static(path.join(__dirname, '/public')))
+
+
+//* Routes
+// Handle requests to the /api/models route
+app.use('/api/models', ObjectRouter)
+
 // Handle errors
 app.use((err, req, res, next) => {
     res.status(err.status || 500).send({
@@ -36,10 +42,6 @@ app.use((err, req, res, next) => {
         }
     })
 })
-
-//* Routes
-// Handle requests to the /api/models route
-app.use('/api/models', ObjectRouter)
 
 // Serve the /dist directory as a static file
 app.use(express.static(path.join(__dirname, "/dist")))

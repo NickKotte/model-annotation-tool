@@ -2,5 +2,5 @@
 export const handleResponse = (res) => {
 	let json = res.json()
 	if (res.ok) return json
-	else return json.then(err => {throw err.error})
+	return json.then(err => { throw err.error })
 }

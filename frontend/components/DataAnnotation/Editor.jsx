@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { updateModel, createModel } from '../../utilities/object.api';
+import { updateModel, createModel } from '../../utilities/api/Object.api';
 import { useEffect, useContext, useState, forwardRef } from 'react';
 import GlobalStateContext from '../../utilities/context';
 import Slide from '@mui/material/Slide';
